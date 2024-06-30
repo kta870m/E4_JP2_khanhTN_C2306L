@@ -25,7 +25,7 @@ public class TransactionBanking {
                 .filter(c->c.getName().equals(keyword))
                 .map(Customer::getId)
                 .collect(Collectors.toSet());
-
+        System.out.println(customerSet);
         Map<Account, Double> accountDoubleMap = new HashMap<>();
                 accounts.stream()
                 .filter(a->customerSet.contains(a.getCustomerId()))
@@ -82,8 +82,9 @@ public class TransactionBanking {
     }
 
     public void saveTransactions(List<Transaction> ts){
-            String fileOut = rootPath.replace("\\","/") + "/data/Account.id_transaction_history.txt";
             try{
+                File saveFile = new File("Account.id_transaction_history.txt");
+                String fileOut = rootPath.replace("\\","/") + "/data/" + saveFile.getName();
                 FileWriter fw = new FileWriter(fileOut);
                 BufferedWriter bf = new BufferedWriter(fw);
                 ts.forEach((t)->{
