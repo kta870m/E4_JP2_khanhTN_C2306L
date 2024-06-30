@@ -25,6 +25,7 @@ public class TransactionBanking {
                 .filter(c->c.getName().equals(keyword))
                 .map(Customer::getId)
                 .collect(Collectors.toSet());
+
         System.out.println(customerSet);
         Map<Account, Double> accountDoubleMap = new HashMap<>();
                 accounts.stream()
@@ -74,21 +75,27 @@ public class TransactionBanking {
         }
     }
 
-    public List<Transaction> findTransactions(LocalDateTime start, LocalDateTime end){
+    public Map<Account, List<Transaction>> findTransactions(String id,LocalDateTime start, LocalDateTime end){
             return transactions.stream()
+                    .filter(p->p.getAccountId().equals(id))
                     .filter(t->(t.getDateTime().isAfter(start) || t.getDateTime().equals(start))
                             && (t.getDateTime().isBefore(end) || t.getDateTime().equals(end)))
-                    .toList();
+                    .collect(Collectors.groupingBy(
+                            p->findById(p.getAccountId()),
+                            Collectors.toList()
+                    ));
     }
 
-    public void saveTransactions(List<Transaction> ts){
+    public void saveTransactions(Map<Account, List<Transaction>> transactions){
             try{
                 File saveFile = new File("Account.id_transaction_history.txt");
                 String fileOut = rootPath.replace("\\","/") + "/data/" + saveFile.getName();
                 FileWriter fw = new FileWriter(fileOut);
                 BufferedWriter bf = new BufferedWriter(fw);
-                ts.forEach((t)->{
-                    String objString = t.transactionToLine("; ");
+                Iterator<Map.Entry<Account, List<Transaction>>> it = transactions.entrySet().iterator();
+                while(it.hasNext()){
+                    Map.Entry<Account, List<Transaction>> entry = it.next();
+                    String objString = entry.getKey().getId() + ": " + entry.getValue() + "\n";
                     try{
                         bf.append(objString);
                         bf.newLine();
@@ -96,7 +103,7 @@ public class TransactionBanking {
                     }catch (IOException e){
                         System.out.println(e.getMessage());
                     }
-                });
+                }
             }catch (IOException e){
                 System.out.println(e.getMessage());
             }

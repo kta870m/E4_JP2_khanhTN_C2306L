@@ -4,6 +4,8 @@ import Repository.AccountRepo;
 import Repository.CustomerRepo;
 import Repository.TransactionBanking;
 import Repository.TransactionRepo;
+
+import javax.xml.transform.Source;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
@@ -71,19 +73,21 @@ public class Main {
                         }
                         break;
                     case 4:
+                        System.out.print("Enter Account ID: ");
+                        String id = br.readLine();
                         System.out.print("Enter Start Date: ");
                         String startdate = br.readLine();
                         LocalDateTime startDate = Date.parseDate(startdate);
                         System.out.print("Enter End Date: ");
                         String enddate = br.readLine();
                         LocalDateTime endDate = Date.parseDate(enddate);
-                        if(!transactionBanking.findTransactions(startDate, endDate).isEmpty()){
-                            transactionBanking.findTransactions(startDate, endDate).forEach(System.out::println);
-                            System.out.println("Do you want to save this tran");
+                        if(!transactionBanking.findTransactions(id, startDate, endDate).isEmpty()){
+                            transactionBanking.findTransactions(id, startDate, endDate);
+                            System.out.print("Do you want to save this tran: ");
                             String save = br.readLine();
                             switch (save) {
                                 case "yes":
-                                    transactionBanking.saveTransactions(transactionBanking.findTransactions(startDate, endDate));
+                                    transactionBanking.saveTransactions(transactionBanking.findTransactions(id, startDate, endDate));
                                     System.out.println("Successfully saved transactions");
                                     break;
                                     case "no": break;
