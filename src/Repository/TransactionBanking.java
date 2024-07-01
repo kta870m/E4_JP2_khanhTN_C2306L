@@ -56,7 +56,7 @@ public class TransactionBanking {
                 Transaction t = null;
                 System.out.print("Enter Amount: ");
                 amount = Integer.parseInt(br.readLine());
-                if(amount % 10000 != 0){
+                if(amount % 10 != 0){
                     System.out.println("Amount must be divisible by 10");
                     status = Status.P;
                 }else if(amount > a.getBalance()){
@@ -70,7 +70,6 @@ public class TransactionBanking {
                 }
                 transactions.add(t);
             }
-
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
