@@ -53,22 +53,23 @@ public class TransactionBanking {
             Account a = findById(id);
             if(a == null){
                 System.out.println("Cannot find account with id: " + id);
-            }
-            System.out.print("Enter Amount: ");
-            amount = Integer.parseInt(br.readLine());
-            if(amount % 10000 != 0){
-                System.out.println("Amount must be divisible by 10");
-                status = Status.P;
-            }else if(amount > a.getBalance()){
-                System.out.println("Amount must be greater than balance");
-                status = Status.R;
             }else{
-                status = Status.C;
-                System.out.println("Successfully withdrawn amount: " + amount);
-                updateAccount(a, amount);
+                System.out.print("Enter Amount: ");
+                amount = Integer.parseInt(br.readLine());
+                if(amount % 10000 != 0){
+                    System.out.println("Amount must be divisible by 10");
+                    status = Status.P;
+                }else if(amount > a.getBalance()){
+                    System.out.println("Amount must be greater than balance");
+                    status = Status.R;
+                }else{
+                    status = Status.C;
+                    System.out.println("Successfully withdrawn amount: " + amount);
+                    updateAccount(a, amount);
+                }
+                t = new Transaction(tranId, a.getId(), amount, Type.WITHDRAWAL,LocalDateTime.now(),status);
+                transactions.add(t);
             }
-            t = new Transaction(tranId, a.getId(), amount, Type.WITHDRAWAL,LocalDateTime.now(),status);
-            transactions.add(t);
 
         }catch (Exception e){
             System.out.println(e.getMessage());
