@@ -66,9 +66,9 @@ public class TransactionBanking {
                     status = Status.C;
                     System.out.println("Successfully withdrawn amount: " + amount);
                     updateAccount(a, amount);
+                    t = new Transaction(tranId, a.getId(), amount, Type.WITHDRAWAL,LocalDateTime.now(),status);
+                    transactions.add(t);
                 }
-                t = new Transaction(tranId, a.getId(), amount, Type.WITHDRAWAL,LocalDateTime.now(),status);
-                transactions.add(t);
             }
 
         }catch (Exception e){
