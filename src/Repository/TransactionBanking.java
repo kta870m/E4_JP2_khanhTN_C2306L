@@ -44,7 +44,6 @@ public class TransactionBanking {
     public void withdraw(){
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         double amount;
-        Transaction t;
         int tranId = transactions.size() + 1;
         Status status = null;
         try{
@@ -54,6 +53,7 @@ public class TransactionBanking {
             if(a == null){
                 System.out.println("Cannot find account with id: " + id);
             }else{
+                Transaction t = null;
                 System.out.print("Enter Amount: ");
                 amount = Integer.parseInt(br.readLine());
                 if(amount % 10000 != 0){
@@ -67,8 +67,8 @@ public class TransactionBanking {
                     System.out.println("Successfully withdrawn amount: " + amount);
                     updateAccount(a, amount);
                     t = new Transaction(tranId, a.getId(), amount, Type.WITHDRAWAL,LocalDateTime.now(),status);
-                    transactions.add(t);
                 }
+                transactions.add(t);
             }
 
         }catch (Exception e){
